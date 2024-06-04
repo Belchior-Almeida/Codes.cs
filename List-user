@@ -1,0 +1,227 @@
+/*Aqui está um código feito em C# no VScode para cadastro de um
+usuário, ver lista de usuário e deletar qualquer um dessa lista
+de usuário*/
+
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+    // Classe para representar um usuário
+    class Usuario
+    {
+        public int ID { get; set; }
+        public string Nome { get; set; }
+        public string Sobrenome { get; set; }
+        public int Idade { get; set; }
+        public string Gmail { get; set; }
+        public string Senha { get; set; }
+        
+        public override string ToString()
+        {
+            return $"ID: {ID}, Nome: {Nome} {Sobrenome}, Idade: {Idade}, Gmail: {Gmail}";
+        }
+    }
+
+    static int ProximoID = 1;
+
+    static void Main()
+    {
+        List<Usuario> usuarios = new List<Usuario>();
+        bool continuar = true;
+
+        while (continuar)
+        {
+            Console.Clear();
+            Console.WriteLine("Menu:");
+            Console.WriteLine("1 - Registrar Usuário");
+            Console.WriteLine("2 - Ver Usuários");
+            Console.WriteLine("3 - Excluir Usuário");
+            Console.WriteLine("4 - Sair");
+            Console.Write("Escolha uma opção: ");
+
+            if (!int.TryParse(Console.ReadLine(), out int opcao))
+            {
+                Console.WriteLine("Opção inválida. Tente novamente.");
+                continue;
+            }
+
+            switch (opcao)
+            {
+                case 1:
+                    RegistrarUsuario(usuarios);
+                    break;
+                case 2:
+                    VerUsuarios(usuarios);
+                    break;
+                case 3:
+                    ExcluirUsuario(usuarios);
+                    break;
+                case 4:
+                    continuar = false;
+                    break;
+                default:
+                    Console.WriteLine("Opção inválida. Tente novamente.");
+                    break;
+            }
+        }
+    }
+
+    static void RegistrarUsuario(List<Usuario> usuarios)
+    {
+        Console.Clear();
+        Usuario usuario = new Usuario
+        {
+            ID = ProximoID++
+        };
+
+        Console.Write("Nome: ");
+        usuario.Nome = Console.ReadLine();
+
+        Console.Write("Sobrenome: ");
+        usuario.Sobrenome = Console.ReadLine();
+
+        while (true)
+        {
+            Console.Write("Idade: ");
+            string inputIdade = Console.ReadLine();
+
+            if (int.TryParse(inputIdade, out int idade))
+            {
+                if (idade < 18)
+                {
+                    Console.WriteLine("Apenas pessoas com 18 anos ou mais podem se cadastrar.");
+                    Console.WriteLine("Pressione qualquer tecla para continuar...");
+                    Console.ReadKey();
+                    return;
+                }
+                usuario.Idade = idade;
+                break;
+            }
+            else
+            {
+                Console.WriteLine("Por favor, insira um número válido para a idade.");
+            }
+        }
+
+        while (true)
+        {
+            Console.Write("Gmail: ");
+            string inputGmail = Console.ReadLine();
+
+            if (inputGmail.EndsWith("@gmail.com"))
+            {
+                // Verificar se o Gmail já existe na lista de usuários
+                if (usuarios.Exists(u => u.Gmail == inputGmail))
+                {
+                    Console.WriteLine("Este Gmail já está registrado. Por favor, use outro Gmail.");
+                }
+                else
+                {
+                    usuario.Gmail = inputGmail;
+                    break;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Por favor, insira um e-mail válido que termine com '@gmail.com'.");
+            }
+        }
+
+        Console.Write("Senha: ");
+        usuario.Senha = Console.ReadLine();
+
+        usuarios.Add(usuario);
+
+        Console.WriteLine("Usuário registrado com sucesso!");
+        Console.WriteLine("Pressione qualquer tecla para continuar...");
+        Console.ReadKey();
+    }
+
+    static void VerUsuarios(List<Usuario> usuarios)
+    {
+        Console.Clear();
+        if (usuarios.Count == 0)
+        {
+            Console.WriteLine("Nenhum usuário registrado.");
+        }
+        else
+        {
+            Console.WriteLine("Lista de Usuários:");
+            foreach (var usuario in usuarios)
+            {
+                Console.WriteLine(usuario);
+            }
+        }
+        Console.WriteLine("Pressione qualquer tecla para continuar...");
+        Console.ReadKey();
+    }
+
+    static void ExcluirUsuario(List<Usuario> usuarios)
+    {
+    Console.Clear();
+    if (usuarios.Count == 0)
+    {
+        Console.WriteLine("Nenhum usuário para excluir.");
+        Console.WriteLine("Pressione qualquer tecla para continuar...");
+        Console.ReadKey();
+        return;
+    }
+
+    Console.WriteLine("Como você deseja excluir o usuário?");
+    Console.WriteLine("1 - Por ID");
+    Console.WriteLine("2 - Por Gmail");
+    Console.Write("Escolha uma opção: ");
+    string escolha = Console.ReadLine();
+
+    switch (escolha)
+    {
+        case "1":
+            Console.Write("Digite o ID do usuário a ser excluído: ");
+            string inputId = Console.ReadLine();
+
+            if (int.TryParse(inputId, out int id))
+            {
+                Usuario usuarioAExcluir = usuarios.Find(u => u.ID == id);
+
+                if (usuarioAExcluir != null)
+                {
+                    usuarios.Remove(usuarioAExcluir);
+                    Console.WriteLine("Usuário excluído com sucesso.");
+                }
+                else
+                {
+                    Console.WriteLine("Usuário não encontrado.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("ID inválido. Tente novamente.");
+            }
+            break;
+        case "2":
+            Console.Write("Digite o Gmail do usuário a ser excluído: ");
+            string gmail = Console.ReadLine();
+
+            Usuario usuarioGmailAExcluir = usuarios.Find(u => u.Gmail == gmail);
+
+            if (usuarioGmailAExcluir != null)
+            {
+                usuarios.Remove(usuarioGmailAExcluir);
+                Console.WriteLine("Usuário excluído com sucesso.");
+            }
+            else
+            {
+                Console.WriteLine("Usuário não encontrado.");
+            }
+            break;
+        default:
+            Console.WriteLine("Opção inválida. Tente novamente.");
+            break;
+    }
+
+    Console.WriteLine("Pressione qualquer tecla para continuar...");
+    Console.ReadKey();
+    }
+}
+
