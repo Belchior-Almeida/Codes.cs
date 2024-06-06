@@ -37,7 +37,8 @@ class Program
             Console.WriteLine("1 - Registrar Usuário");
             Console.WriteLine("2 - Ver Usuários");
             Console.WriteLine("3 - Excluir Usuário");
-            Console.WriteLine("4 - Sair");
+            Console.WriteLine("4 - Entrar na Sua conta");
+            Console.WriteLine("5 - Sair");
             Console.Write("Escolha uma opção: ");
 
             if (!int.TryParse(Console.ReadLine(), out int opcao))
@@ -58,6 +59,9 @@ class Program
                     ExcluirUsuario(usuarios);
                     break;
                 case 4:
+                    EntrarUsuario(usuarios);
+                    break;
+                case 5:
                     continuar = false;
                     break;
                 default:
@@ -223,5 +227,76 @@ class Program
     Console.WriteLine("Pressione qualquer tecla para continuar...");
     Console.ReadKey();
     }
+
+    static void EntrarUsuario(List<Usuario> usuarios)
+    {
+        while (true)
+        {
+            Console.Clear();
+
+            Console.WriteLine("Tela de Login:");
+            Console.WriteLine("1 - Entrar");
+            Console.WriteLine("2 - Registrar Usuário");
+            Console.WriteLine("3 - Voltar ao Menu Principal");
+            Console.Write("Escolha uma opção: ");
+            string opcao = Console.ReadLine();
+
+            switch (opcao)
+            {
+                case "1":
+                    Console.Write("Digite seu Gmail: ");
+                    string gmail = Console.ReadLine();
+
+                    if (!gmail.EndsWith("@gmail.com"))
+                    {
+                        Console.WriteLine("Por favor, insira um e-mail válido que termine com '@gmail.com'.");
+                        Console.WriteLine("Pressione qualquer tecla para continuar...");
+                        Console.ReadKey();
+                        break;
+                    }
+
+                    Console.Write("Digite sua Senha: ");
+                    string senha = Console.ReadLine();
+
+                    Usuario usuarioEncontrado = usuarios.Find(u => u.Gmail == gmail);
+
+                    if (usuarioEncontrado == null)
+                    {
+                        Console.WriteLine("Gmail não encontrado.");
+                    }
+                    else if (usuarioEncontrado.Senha != senha)
+                    {
+                        Console.WriteLine("Senha incorreta.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Você conseguiu!");
+                        Console.WriteLine("Pressione qualquer tecla para continuar...");
+                        Console.ReadKey();
+                        return;
+                    }
+
+                    Console.WriteLine("Pressione qualquer tecla para tentar novamente...");
+                    Console.ReadKey();
+                    break;
+
+                case "2":
+                    RegistrarUsuario(usuarios);
+                    break;
+
+                case "3":
+                    return;
+
+                default:
+                    Console.WriteLine("Opção inválida. Tente novamente.");
+                    Console.WriteLine("Pressione qualquer tecla para continuar...");
+                    Console.ReadKey();
+                    break;
+            }
+        }
+    }
+
+
+
 }
 
