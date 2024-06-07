@@ -244,40 +244,55 @@ class Program
             switch (opcao)
             {
                 case "1":
-                    Console.Write("Digite seu Gmail: ");
-                    string gmail = Console.ReadLine();
-
-                    if (!gmail.EndsWith("@gmail.com"))
+                    while (true)
                     {
-                        Console.WriteLine("Por favor, insira um e-mail válido que termine com '@gmail.com'.");
-                        Console.WriteLine("Pressione qualquer tecla para continuar...");
-                        Console.ReadKey();
-                        break;
-                    }
+                        Console.Write("Digite seu Gmail: ");
+                        string gmail = Console.ReadLine();
 
-                    Console.Write("Digite sua Senha: ");
-                    string senha = Console.ReadLine();
+                        if (!gmail.EndsWith("@gmail.com"))
+                        {
+                            Console.WriteLine("Por favor, insira um e-mail válido que termine com '@gmail.com'.");
+                        }
+                        else
+                        {
+                            Console.Write("Digite sua Senha: ");
+                            string senha = Console.ReadLine();
 
-                    Usuario usuarioEncontrado = usuarios.Find(u => u.Gmail == gmail);
+                            Usuario usuarioEncontrado = usuarios.Find(u => u.Gmail == gmail);
 
-                    if (usuarioEncontrado == null)
-                    {
-                        Console.WriteLine("Gmail não encontrado.");
-                    }
-                    else if (usuarioEncontrado.Senha != senha)
-                    {
-                        Console.WriteLine("Senha incorreta.");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Você conseguiu!");
-                        Console.WriteLine("Pressione qualquer tecla para continuar...");
-                        Console.ReadKey();
-                        return;
-                    }
+                            if (usuarioEncontrado == null)
+                            {
+                                Console.WriteLine("Gmail não encontrado.");
+                            }
+                            else if (usuarioEncontrado.Senha != senha)
+                            {
+                                Console.WriteLine("Senha incorreta.");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Você conseguiu!");
+                                Console.WriteLine("Pressione qualquer tecla para continuar...");
+                                Console.ReadKey();
+                                return;
+                            }
+                        }
 
-                    Console.WriteLine("Pressione qualquer tecla para tentar novamente...");
-                    Console.ReadKey();
+                        Console.WriteLine("Deseja tentar novamente?");
+                        Console.WriteLine("1 - Tentar de Novo");
+                        Console.WriteLine("2 - Voltar ao Menu Principal");
+                        string tentativa = Console.ReadLine();
+
+                        if (tentativa == "2")
+                        {
+                            return;
+                        }
+                        else if (tentativa != "1")
+                        {
+                            Console.WriteLine("Opção inválida. Tente novamente.");
+                            Console.WriteLine("Pressione qualquer tecla para continuar...");
+                            Console.ReadKey();
+                        }
+                    }
                     break;
 
                 case "2":
@@ -296,7 +311,9 @@ class Program
         }
     }
 
-
-
 }
+
+
+
+
 
